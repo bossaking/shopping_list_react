@@ -20,7 +20,7 @@ class List extends React.Component {
 
     selectList = () => {
         this.setState({active: true});
-        this.props.click(this.props.listIndex);
+        this.props.click(this.props.listId);
     }
 
 }

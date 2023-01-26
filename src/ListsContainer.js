@@ -1,6 +1,6 @@
 import React from 'react';
 import addImage from './images/add_list.svg';
-import shoppingLists from './shopping_list.json';
+
 import List from "./List";
 
 class ListsContainer extends React.Component {
@@ -8,20 +8,27 @@ class ListsContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedListIndex: -1,
+            selectedListId: -1,
             lists: []
         }
-        this.test = this.test.bind(this);
+        this.selectList = this.selectList.bind(this);
+        this.removeList = this.removeList.bind(this);
     }
 
 
     render() {
 
-        for (let i = 0; i < shoppingLists.lists.length; i++) {
-            this.state.lists.push(
-                <List ref={React.createRef()} listIndex={i} listTitle={shoppingLists.lists[i].list_title} click={this.test}/>
-            );
+
+        if (this.state.lists.length === 0) {
+            for (let i = 0; i < this.props.shoppingLists.lists.length; i++) {
+                this.state.lists.push(
+                    <List key={this.props.shoppingLists?.lists[i]?.list_id} ref={React.createRef()} listId={this.props.shoppingLists?.lists[i]?.list_id}
+                          listTitle={this.props.shoppingLists?.lists[i]?.list_title}
+                          click={this.selectList}/>
+                );
+            }
         }
+
 
         return <div className={'card shopping-lists-container'}>
             <div className={'card-header'}>
@@ -39,11 +46,22 @@ class ListsContainer extends React.Component {
         </div>;
     }
 
-    test(listIndex) {
-        if (this.state.selectedListIndex !== -1) {
-            this.state.lists[this.state.selectedListIndex].ref.current.unselectList();
+    selectList(listId) {
+        if (this.state.selectedListId !== -1 && this.state.selectedListId !== listId) {
+            console.log(this.state.selectedListId);
+            this.state.lists[this.state.lists.findIndex(l => l.props.listId === this.state.selectedListId)].ref.current.unselectList();
         }
-        this.state.selectedListIndex = listIndex;
+        this.setState({selectedListId: listId});
+        this.props.selectList(listId);
+    }
+
+    removeList(listId) {
+        this.state.lists[this.state.lists.findIndex(l => l.props.listId === listId)].ref.current.unselectList();
+        this.state.lists.splice(this.state.lists.findIndex(l => l.props.listId === listId), 1)
+        this.setState({
+            selectedListId: -1,
+            lists: this.state.lists
+        });
     }
 
 }
