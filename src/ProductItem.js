@@ -1,4 +1,5 @@
 import React from 'react';
+import deleteImage from './images/delete-button.svg';
 
 class ProductItem extends React.Component {
 
@@ -13,8 +14,9 @@ class ProductItem extends React.Component {
 
     render() {
         return (
-            <div className={ this.state.completed ? 'list-item completed' : 'list-item'} onClick={this.completeProduct.bind(this)} onDoubleClick={this.deleteProduct.bind(this)}>
-                <span>{this.props.productName}</span>
+            <div className={ this.state.completed ? 'list-item completed' : 'list-item'}>
+                <span onClick={this.completeProduct.bind(this)}>{this.props.productName}</span>
+                <img alt={'remove'} src={deleteImage} onClick={this.deleteProduct.bind(this)}/>
             </div>
         );
     }

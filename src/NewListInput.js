@@ -1,12 +1,12 @@
 import React from 'react';
 
-class NewListInput extends React.Component{
+class NewListInput extends React.Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
-          listName: ''
+            listName: ''
         };
 
         this._handleKeyDown = this._handleKeyDown.bind(this);
@@ -15,17 +15,32 @@ class NewListInput extends React.Component{
 
 
     render() {
-        return(
-            <input type={'text'} placeholder={'Nowa lista'} onKeyDown={this._handleKeyDown} />
+        return (
+            <div className={'input-container'}>
+                <input value={this.state.listName} type={'text'} placeholder={'Nowa lista'} onKeyDown={this._handleKeyDown.bind(this)} onInput={this.textInput.bind(this)}/>
+                <button onClick={this.addNewList.bind(this)}>Dodaj</button>
+            </div>
         );
     }
 
     _handleKeyDown = (e) => {
-        if(e.key === 'Enter'){
-            this.props.newListAdded(e.target.value);
-            e.target.value = '';
+        if (e.key === 'Enter') {
+            this.addNewList();
         }
     };
+
+    addNewList(){
+        this.props.newListAdded(this.state.listName);
+        this.setState({
+            listName: ''
+        });
+    }
+
+    textInput(e){
+        this.setState({
+           listName: e.target.value
+        });
+    }
 
 }
 
